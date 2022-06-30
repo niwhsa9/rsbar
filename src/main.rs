@@ -5,7 +5,7 @@ use std::ffi::CString;
 
 fn main() {
     let n = 0 as *const c_char;
-    let v = CString::new("Hello, world!").unwrap();
+    let v = CString::new("Hello, world! ").unwrap();
     unsafe {
         let dpy = xlib::XOpenDisplay(n);
         let screen = xlib::XDefaultScreen(dpy);
