@@ -40,7 +40,7 @@ fn main() {
         }
         thread::sleep(time::Duration::from_millis(UPDATE_FREQ_MS))
     }
-    println!("Done");
+
     // Free dpy
     unsafe {
         xlib::XCloseDisplay(dpy);
