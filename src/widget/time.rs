@@ -6,7 +6,7 @@ pub struct TimeWidget {
 }
 
 impl Widget for TimeWidget {
-    fn get_text(&self) -> String {
+    fn get_text(&mut self) -> String {
         let now : DateTime<Local> = Local::now();
         now.format("%b %d, %l:%M %P").to_string()
     }
