@@ -5,7 +5,7 @@ use std::{thread, time};
 use std::sync::mpsc::{Sender, Receiver, channel};
 use dbus::{ffidisp::Connection, Message, MessageType};
 
-use widget::{TimeWidget, BatteryWidget, Widget};
+use widget::{TimeWidget, BatteryWidget, DiscordWidget, Widget};
 pub mod widget;
 
 const UPDATE_FREQ_MS : u64 = 100;
@@ -16,12 +16,13 @@ fn main() {
     let inter_widget_sep = String::from(" ".repeat(5));
 
     // Create a channel for dbus callbacks to discord widget
-    let (tx, rx) : (Sender<Message>, Receiver<Message>) = channel();
+    let (disc_tx, disc_rx) : (Sender<Message>, Receiver<Message>) = channel();
 
     // Create widgets
     let mut widgets : Vec<Box<dyn Widget>> = vec![
         Box::new(TimeWidget {}),
         Box::new(BatteryWidget::new()),
+        Box::new(DiscordWidget::new(disc_rx))
     ];
 
     // X11 helpers
@@ -29,7 +30,18 @@ fn main() {
     let screen : c_int = unsafe{xlib::XDefaultScreen(dpy)};
     let win : c_ulong = unsafe{xlib::XRootWindow(dpy, screen)};
 
-    // Launch a thread to recieve on DBus and message relevant widgets
+    // Launch a thread to recieve on DBus and dispatch the message to relevant widgets
+    thread::spawn(|| {
+        let dbus_conn = Connection::new_session().unwrap();
+        dbus_conn.add_match("interface='org.kde.StatusNotifierItem'").unwrap();
+        loop {
+            if let Some(msg) = dbus_conn.incoming(1000).next() {
+                if &(*msg.path().unwrap()) == "/org/ayatana/NotificationItem/discord1" {
+                    println!("Recieved disc");
+                }
+            }
+        }
+    });
 
     loop {  
         // Determine bar text from widgets

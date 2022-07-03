@@ -27,7 +27,6 @@ impl Widget for BatteryWidget {
             Ok(_) => {}
         };
         percent.retain(|c| !c.is_whitespace());
-        println!("{}", percent);
         self.percent = percent.parse().unwrap();
         percent.push_str("%");
         return percent
@@ -42,7 +41,7 @@ impl Widget for BatteryWidget {
         };
         let mut status = String::new();
         match bat_status_file.read_to_string(&mut status) {
-            Err(err) => panic!("Could not read bat status"),
+            Err(_) => panic!("Could not read bat status"),
             Ok(_) => {}
         };
         status.retain(|c| !c.is_whitespace());
