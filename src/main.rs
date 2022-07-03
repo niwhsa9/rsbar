@@ -11,7 +11,7 @@ const UPDATE_FREQ_MS : u64 = 100;
 fn main() {
     // Widget seperation
     let widget_icon_sep = String::from(" ");
-    let inter_widget_sep = String::from("      ");
+    let inter_widget_sep = String::from("         ");
 
     // Create widgets
     let mut widgets : Vec<Box<dyn Widget>> = vec![
