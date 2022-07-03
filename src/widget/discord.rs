@@ -9,14 +9,22 @@ pub struct DiscordWidget {
 
 impl Widget for DiscordWidget {
     fn get_text(&mut self) -> String {
+        // Check for any pending messages on the channel
+        match self.rx.try_recv() {
+            Ok(_) => {
+                self.notif_pending = !self.notif_pending;
+            } 
+            Err(_) => {}
+        }
         String::from("")
     }
 
     fn get_icon(&self) -> String {
-        //String::from("")
-        // Check for any pending messages on the channel
-
-        String::from("")
+        if self.notif_pending {
+            String::from("")
+        } else {
+            String::from("")
+        }
     }
 }
 

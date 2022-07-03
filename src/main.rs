@@ -31,13 +31,13 @@ fn main() {
     let win : c_ulong = unsafe{xlib::XRootWindow(dpy, screen)};
 
     // Launch a thread to recieve on DBus and dispatch the message to relevant widgets
-    thread::spawn(|| {
+    thread::spawn(move || {
         let dbus_conn = Connection::new_session().unwrap();
-        dbus_conn.add_match("interface='org.kde.StatusNotifierItem'").unwrap();
+        dbus_conn.add_match("interface='org.kde.StatusNotifierItem',member='NewIconThemePath'").unwrap();
         loop {
             if let Some(msg) = dbus_conn.incoming(1000).next() {
                 if &(*msg.path().unwrap()) == "/org/ayatana/NotificationItem/discord1" {
-                    println!("Recieved disc");
+                    disc_tx.send(msg).unwrap();
                 }
             }
         }
