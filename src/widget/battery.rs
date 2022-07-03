@@ -29,11 +29,36 @@ impl Widget for BatteryWidget {
         percent.retain(|c| !c.is_whitespace());
         println!("{}", percent);
         self.percent = percent.parse().unwrap();
+        percent.push_str("%");
         return percent
 
     }
 
     fn get_icon(&self) -> String {
-        String::from("")
+        let bat_status_path = Path::new("/sys/class/power_supply/BAT0/status");
+        let mut bat_status_file = match File::open(&bat_status_path) {
+            Err(_) => panic!("Could not read bat status"),
+            Ok(file) => file
+        };
+        let mut status = String::new();
+        match bat_status_file.read_to_string(&mut status) {
+            Err(err) => panic!("Could not read bat status"),
+            Ok(_) => {}
+        };
+        status.retain(|c| !c.is_whitespace());
+
+        let icon = match status.as_str() {
+            "Discharging" => {
+                match self.percent {
+                    90.. => "",
+                    70.. => "",
+                    50.. => "",
+                    _ => ""
+                }
+            }, 
+            _ => ""
+
+        }.to_string();
+        return icon;
     }
 }
