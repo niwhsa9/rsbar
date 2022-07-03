@@ -32,7 +32,7 @@ impl DiscordWidget {
     pub fn new(rx : Receiver<Message>) -> DiscordWidget {
        DiscordWidget { 
            rx : rx,
-           notif_pending : false
+           notif_pending : true
         }
     }
 }
