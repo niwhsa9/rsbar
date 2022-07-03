@@ -20,9 +20,9 @@ fn main() {
 
     // Create widgets
     let mut widgets : Vec<Box<dyn Widget>> = vec![
+        Box::new(DiscordWidget::new(disc_rx)),
         Box::new(TimeWidget {}),
         Box::new(BatteryWidget::new()),
-        Box::new(DiscordWidget::new(disc_rx))
     ];
 
     // X11 helpers

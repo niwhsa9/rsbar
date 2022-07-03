@@ -6,9 +6,10 @@ This is a status bar I have written for DWM with Rust. It is my first Rust proje
 ### Current features
 - System battery
 - Date time
+- Discord notifications via DBus interaction
 
 ### Planned features
-- DBus interactions for discord and slack notifs
-- Reminders to water my plants via TCP connection to an ESP8266 with capacative moisture probes
+- Slack notify
+- Integration with my IoT soil moisture system
 - Monitor configuration
 - Automatic timezone adjustment
