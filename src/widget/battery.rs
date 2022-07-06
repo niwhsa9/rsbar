@@ -1,4 +1,4 @@
-use super::base_widget::Widget;
+use super::Widget;
 
 pub struct BatteryWidget {
     percent: i32,

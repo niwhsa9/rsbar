@@ -1,4 +1,4 @@
-use super::base_widget::Widget;
+use super::Widget;
 use dbus::Message;
 use std::sync::mpsc::Receiver;
 
