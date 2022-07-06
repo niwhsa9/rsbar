@@ -38,8 +38,9 @@ fn main() {
             .unwrap();
         loop {
             if let Some(msg) = dbus_conn.incoming(1000).next() {
-                if &(*msg.path().unwrap()) == "/org/ayatana/NotificationItem/discord1" {
-                    disc_tx.send(msg).unwrap();
+                match &(*msg.path().unwrap()) {
+                    "/org/ayatana/NotificationItem/discord1" => { disc_tx.send(msg).unwrap(); }
+                    _ => {}
                 }
             }
         }
