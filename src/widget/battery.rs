@@ -1,7 +1,4 @@
 use super::base_widget::Widget;
-use std::fs::File;
-use std::io::prelude::*;
-use std::path::Path;
 
 pub struct BatteryWidget {
     percent: i32,
@@ -14,16 +11,8 @@ impl BatteryWidget {
 
 impl Widget for BatteryWidget {
     fn get_text(&mut self) -> String {
-        let bat_percent_path = Path::new("/sys/class/power_supply/BAT0/capacity");
-        let mut bat_percent_file = match File::open(&bat_percent_path) {
-            Err(_) => panic!("Could not read battery"),
-            Ok(file) => file,
-        };
-        let mut percent = String::new();
-        match bat_percent_file.read_to_string(&mut percent) {
-            Err(_) => panic!("Could not read battery"),
-            Ok(_) => {}
-        };
+        let bat_percent_path = "/sys/class/power_supply/BAT0/capacity";
+        let mut percent = std::fs::read_to_string(bat_percent_path).expect("Could not read battery");
         percent.retain(|c| !c.is_whitespace());
         self.percent = percent.parse().unwrap();
         percent.push_str("%");
@@ -31,16 +20,8 @@ impl Widget for BatteryWidget {
     }
 
     fn get_icon(&self) -> String {
-        let bat_status_path = Path::new("/sys/class/power_supply/BAT0/status");
-        let mut bat_status_file = match File::open(&bat_status_path) {
-            Err(_) => panic!("Could not read bat status"),
-            Ok(file) => file,
-        };
-        let mut status = String::new();
-        match bat_status_file.read_to_string(&mut status) {
-            Err(_) => panic!("Could not read bat status"),
-            Ok(_) => {}
-        };
+        let bat_status_path = "/sys/class/power_supply/BAT0/status";
+        let mut status = std::fs::read_to_string(bat_status_path).expect("Could not read battery");
         status.retain(|c| !c.is_whitespace());
 
         let icon = match status.as_str() {
