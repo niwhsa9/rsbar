@@ -18,11 +18,11 @@ fn main() {
     // Create a channel for dbus callbacks to discord widget
     let (disc_tx, disc_rx): (Sender<Message>, Receiver<Message>) = channel();
 
-    // Create widgets
+    // Create widgets [Generic default config for simple systems, uncomment as needed]
     let mut widgets: Vec<Box<dyn Widget>> = vec![
-        Box::new(DiscordWidget::new(disc_rx)),
+        // Box::new(DiscordWidget::new(disc_rx)),
         Box::new(TimeWidget {}),
-        Box::new(BatteryWidget::new()),
+        // Box::new(BatteryWidget::new()),
     ];
 
     // X11 helpers
